@@ -1,50 +1,65 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-const BOT_TOKEN = ''; // 替换为你的机器人 Token
-const GAME_URL = ''; // 替换为你的游戏链接
+
+// ✅ 读取环境变量
+const BOT_TOKEN = process.env.BOT_TOKEN;
+const GAME_URL = process.env.GAME_URL;
+
+console.log("🔍 服务器启动时读取的环境变量：");
+console.log("BOT_TOKEN:", BOT_TOKEN ? "已加载 ✅" : "未定义 ❌");
+console.log("GAME_URL:", GAME_URL ? GAME_URL : "未定义 ❌");
+
+if (!BOT_TOKEN) {
+    console.error("❌ 错误: BOT_TOKEN 未定义，请检查环境变量！");
+    process.exit(1);
+}
 
 app.use(express.json());
 
-app.post(`/webhook`, (req, res) => {
-    const { message, edited_message, my_chat_member } = req.body;
+// ✅ 处理 Telegram Webhook
+app.post('/webhook', async (req, res) => {
+    console.log("📩 收到 Telegram 消息:", req.body);
 
-    // 处理普通消息
-    if (message && message.text === '/start') {
-        const chatId = message.chat.id;
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-        axios.post(url, {
-            chat_id: chatId,
-            text: `点击链接开始游戏：${GAME_URL}`,
-        });
+    if (!req.body || !req.body.message || !req.body.message.text) {
+        console.error("❌ 错误: 收到的请求格式不正确", req.body);
+        return res.sendStatus(400);
     }
 
-    // 处理编辑过的消息
-    if (edited_message && edited_message.text === '/start') {
-        const chatId = edited_message.chat.id;
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-        axios.post(url, {
-            chat_id: chatId,
-            text: `点击链接开始游戏：${GAME_URL}`,
-        });
-    }
+    const message = req.body.message;
+    const chatId = message.chat.id;
 
-    // 处理用户对机器人的操作（例如踢出或重新加入）
-    if (my_chat_member) {
-        const chatId = my_chat_member.chat.id;
-        const status = my_chat_member.new_chat_member.status;
-        if (status === 'kicked') {
-            console.log(`用户 ${chatId} 踢出了机器人。`);
-        } else if (status === 'member') {
-            console.log(`用户 ${chatId} 重新加入了机器人。`);
+    if (message.text === '/start') {
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+        console.log(`🛠️ 正在向 Telegram 发送消息: ${url}`);
+
+        try {
+            const response = await axios.post(url, {
+                chat_id: chatId,
+                text: `🎮 点击这里开始游戏：${GAME_URL}`,
+            });
+
+            console.log("✅ 发送成功:", response.data);
+            res.sendStatus(200);
+        } catch (error) {
+            console.error("❌ 发送消息时出错:", error.response ? error.response.data : error.message);
+            res.sendStatus(500);
         }
+    } else {
+        res.sendStatus(200);
     }
-
-    // 返回成功响应
-    res.sendStatus(200);
 });
 
+// ✅ 监听 `/`，避免 Vercel 404 错误
+app.get('/', (req, res) => {
+    res.send("🚀 Telegram Bot Server is running!");
+});
+
+// ✅ 启动服务器
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`✅ 服务器运行在端口 ${PORT}`);
 });
