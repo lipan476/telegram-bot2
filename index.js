@@ -2,8 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
-const BOT_TOKEN = '7825017397:AAGABk8l8yry363aKB_IFiiSjgrQ-Q08zO8'; // 替换为你的 Telegram 机器人 Token
-const GAME_URL = ' https://lipan476.github.io/SokobanGame/'; // 替换为你的游戏链接
+const BOT_TOKEN = ''; // 替换为你的 Telegram 机器人 Token
+const GAME_URL = ''; // 替换为你的游戏链接
 
 app.use(express.json());
 
