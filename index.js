@@ -40,7 +40,7 @@ app.post('/webhook', async (req, res) => {
         try {
             const response = await axios.post(url, {
                 chat_id: chatId,
-                text: `🎮 点击这里开始游戏：${GAME_URL}`,
+                text: `🎮 Click here to start the game：${GAME_URL}`,
             });
 
             console.log("✅ 发送成功:", response.data);
