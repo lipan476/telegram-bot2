@@ -7,11 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 // ✅ 读取环境变量
 const BOT_TOKEN = process.env.BOT_TOKEN;
-const GAME_URL = process.env.GAME_URL;
+const WEB_APP_URL = process.env.WEB_APP_URL || 'https://lipan476.github.io/SokobanGame/'; // 改用WEB_APP_URL更符合语义
 
 console.log("🔍 服务器启动时读取的环境变量：");
 console.log("BOT_TOKEN:", BOT_TOKEN ? "已加载 ✅" : "未定义 ❌");
-console.log("GAME_URL:", GAME_URL ? GAME_URL : "未定义 ❌");
+console.log("WEB_APP_URL:", WEB_APP_URL);
 
 if (!BOT_TOKEN) {
     console.error("❌ 错误: BOT_TOKEN 未定义，请检查环境变量！");
@@ -22,10 +22,10 @@ app.use(express.json());
 
 // ✅ 处理 Telegram Webhook
 app.post('/webhook', async (req, res) => {
-    console.log("📩 收到 Telegram 消息:", req.body);
+    console.log("📩 收到 Telegram 消息:", JSON.stringify(req.body, null, 2));
 
     if (!req.body || !req.body.message || !req.body.message.text) {
-        console.error("❌ 错误: 收到的请求格式不正确", req.body);
+        console.error("❌ 错误: 收到的请求格式不正确");
         return res.sendStatus(400);
     }
 
@@ -40,7 +40,15 @@ app.post('/webhook', async (req, res) => {
         try {
             const response = await axios.post(url, {
                 chat_id: chatId,
-                text: `🎮 Click here to start the game：${GAME_URL}`,
+                text: '🎮 Welcome to Sokoban Game! Click the button below to play:',
+                reply_markup: {
+                    inline_keyboard: [
+                        [{
+                            text: "Play Now 🎮",
+                            web_app: { url: WEB_APP_URL } // 使用Web App方式打开
+                        }]
+                    ]
+                }
             });
 
             console.log("✅ 发送成功:", response.data);
