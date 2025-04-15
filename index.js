@@ -33,6 +33,7 @@ app.post('/webhook', async (req, res) => {
     const message = req.body.message;
     const chatId = message.chat.id;
 
+    console.log("📩 消息内容:", message.text);
     if (message.text === '/start') {
     //if (message.text.startsWith('/start')) {
         //const args = message.text.split(' ');
