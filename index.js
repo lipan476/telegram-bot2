@@ -10,6 +10,7 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 //const WEB_APP_URL = process.env.WEB_APP_URL || 'https://lipan476.github.io/SokobanGame/'; // 改用WEB_APP_URL更符合语义
 const WEB_APP_URL = process.env.WEB_APP_URL; // 改用WEB_APP_URL更符合语义
 
+// ✅ 检查环境变量
 console.log("🔍 服务器启动时读取的环境变量：");
 console.log("BOT_TOKEN:", BOT_TOKEN ? "已加载 ✅" : "未定义 ❌");
 console.log("WEB_APP_URL:", WEB_APP_URL);
