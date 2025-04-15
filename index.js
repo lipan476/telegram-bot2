@@ -36,6 +36,7 @@ app.post('/webhook', async (req, res) => {
     console.log("📩 消息内容:", message.text);
     //if (message.text === '/start') {
     if (message.text.startsWith('/start')) {
+        //start tapps_App_Screen，/start tapps_New， /start tapps_recent
         //const args = message.text.split(' ');
         //const refCode = args[1] || null;
 
