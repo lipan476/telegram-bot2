@@ -7,7 +7,8 @@ const PORT = process.env.PORT || 3000;
 
 // ✅ 读取环境变量
 const BOT_TOKEN = process.env.BOT_TOKEN;
-const WEB_APP_URL = process.env.WEB_APP_URL || 'https://lipan476.github.io/SokobanGame/'; // 改用WEB_APP_URL更符合语义
+//const WEB_APP_URL = process.env.WEB_APP_URL || 'https://lipan476.github.io/SokobanGame/'; // 改用WEB_APP_URL更符合语义
+const WEB_APP_URL = process.env.WEB_APP_URL; // 改用WEB_APP_URL更符合语义
 
 console.log("🔍 服务器启动时读取的环境变量：");
 console.log("BOT_TOKEN:", BOT_TOKEN ? "已加载 ✅" : "未定义 ❌");
@@ -32,7 +33,13 @@ app.post('/webhook', async (req, res) => {
     const message = req.body.message;
     const chatId = message.chat.id;
 
-    if (message.text === '/start') {
+    //if (message.text === '/start') {
+    if (message.text.startsWith('/start')) {
+        const args = message.text.split(' ');
+        const refCode = args[1] || null;
+
+        console.log('用户启动参数：', refCode);
+
         const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
         console.log(`🛠️ 正在向 Telegram 发送消息: ${url}`);
