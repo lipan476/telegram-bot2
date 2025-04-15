@@ -33,12 +33,12 @@ app.post('/webhook', async (req, res) => {
     const message = req.body.message;
     const chatId = message.chat.id;
 
-    //if (message.text === '/start') {
-    if (message.text.startsWith('/start')) {
-        const args = message.text.split(' ');
-        const refCode = args[1] || null;
+    if (message.text === '/start') {
+    //if (message.text.startsWith('/start')) {
+        //const args = message.text.split(' ');
+        //const refCode = args[1] || null;
 
-        console.log('用户启动参数：', refCode);
+        //console.log('用户启动参数：', refCode);
 
         const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
