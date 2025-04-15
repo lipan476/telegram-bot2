@@ -34,8 +34,8 @@ app.post('/webhook', async (req, res) => {
     const chatId = message.chat.id;
 
     console.log("📩 消息内容:", message.text);
-    if (message.text === '/start') {
-    //if (message.text.startsWith('/start')) {
+    //if (message.text === '/start') {
+    if (message.text.startsWith('/start')) {
         //const args = message.text.split(' ');
         //const refCode = args[1] || null;
 
